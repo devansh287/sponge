@@ -13,8 +13,13 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 using namespace std;
 
 ByteStream::ByteStream(const size_t capacit)
-    : capacity(capacit), taken(0), total_written(0), total_read(0), eo(false), inpu_ended(false), buf(), eror(false) {}
+    : capacity(capacit), taken(0), total_written(0), total_read(0), inpu_ended(false), buf(), eror(false) {}
 
+/*
+Function to write data to the byte stream.
+I check the number of available bytes, and try to fit in what I can.
+If the entire data can be fitted, that happens.
+*/
 size_t ByteStream::write(const string &data) {
     const size_t available = capacity - taken;
     if (available == 0)
@@ -26,9 +31,6 @@ size_t ByteStream::write(const string &data) {
     }
     taken = buf.size();
     total_written += limit;
-    if (limit > 0)
-        eo = false;
-    // cout << "Written: " << written << endl;
     return limit;
 }
 
@@ -45,6 +47,8 @@ string ByteStream::peek_output(const size_t len) const {
 }
 
 //! \param[in] len bytes will be removed from the output side of the buffer
+// I erase the len number of bytes from the vector if it has that many number of bytes,
+// otherwise, I just erase the entire vector.
 void ByteStream::pop_output(const size_t len) {
     auto i = buf.begin();
     if (len <= taken) {
@@ -56,9 +60,6 @@ void ByteStream::pop_output(const size_t len) {
         taken = 0;
         total_read += taken;
     }
-
-    if (taken == 0)
-        eo = true;
 }
 
 //! Read (i.e., copy and then pop) the next "len" bytes of the stream

@@ -16,17 +16,16 @@ class ByteStream {
     // all, but if any of your tests are taking longer than a second,
     // that's a sign that you probably want to keep exploring
     // different approaches.
-    size_t capacity;
-    size_t taken;
-    size_t total_written;
-    size_t total_read;
-    bool eo;
-    bool inpu_ended;
-    std::vector<char> buf;
-    bool eror;  //!< Flag indicating that the stream suffered an error.
+    const size_t capacity;
+    size_t taken;           // number of bytes in the stream filled at the present moment
+    size_t total_written;   // total number of bytes filled
+    size_t total_read;      // total number of bytes read
+    bool inpu_ended;        // flag indicating if the input has ended or not
+    std::vector<char> buf;  // our buffer stream represented as
+    bool eror;              //!< Flag indicating that the stream suffered an error.
 
   public:
-    //! Construct a stream with room for `capacity` bytes.
+    //! Construct a stream with room for `capacit` bytes.
     ByteStream(const size_t capacit);
 
     //! \name "Input" interface for the writer
