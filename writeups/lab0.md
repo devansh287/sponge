@@ -1,13 +1,13 @@
 Lab 0 Writeup
 =============
 
-My name: [your name here]
+My name: Devansh Sharma
 
-My SUNet ID: [your sunetid here]
+My SUNet ID: devansh
 
 This lab took me about [n] hours to do. I [did/did not] attend the lab session.
 
-My secret code from section 2.1 was: [code here]
+My secret code from section 2.1 was: 735349
 
 - Optional: I had unexpected difficulty with: [describe]
 
