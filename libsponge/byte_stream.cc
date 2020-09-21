@@ -12,73 +12,69 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
-ByteStream::ByteStream(const size_t capacit) : capacity(capacit), taken(0), total_written(0), total_read(0), eo(false), inpu_ended(false), buf(), eror(false){ }
+ByteStream::ByteStream(const size_t capacit)
+    : capacity(capacit), taken(0), total_written(0), total_read(0), eo(false), inpu_ended(false), buf(), eror(false) {}
 
-size_t ByteStream::write(const string &data) 
-{
+size_t ByteStream::write(const string &data) {
     const size_t available = capacity - taken;
-    if (available == 0) return 0;
+    if (available == 0)
+        return 0;
     const size_t limit = (data.length() <= available) ? data.length() : available;
 
-    for (size_t i = 0; i < limit; i++)
-    {
+    for (size_t i = 0; i < limit; i++) {
         buf.push_back(data[i]);
     }
     taken = buf.size();
     total_written += limit;
-    if (limit > 0) eo = false;
-    //cout << "Written: " << written << endl;
+    if (limit > 0)
+        eo = false;
+    // cout << "Written: " << written << endl;
     return limit;
 }
 
 //! \param[in] len bytes will be copied from the output side of the buffer
-string ByteStream::peek_output(const size_t len) const 
-{
+string ByteStream::peek_output(const size_t len) const {
     string output = "";
 
     const size_t limit = (len <= taken) ? len : taken;
 
-    for (size_t i = 0; i < limit; i++) output += buf.at(i);
+    for (size_t i = 0; i < limit; i++)
+        output += buf.at(i);
 
     return output;
 }
 
 //! \param[in] len bytes will be removed from the output side of the buffer
-void ByteStream::pop_output(const size_t len) 
-{
+void ByteStream::pop_output(const size_t len) {
     auto i = buf.begin();
-    if (len <= taken)
-    {
-        buf.erase(i,i + len);
+    if (len <= taken) {
+        buf.erase(i, i + len);
         taken -= len;
         total_read += len;
-    }
-    else
-    {
-        buf.erase(i,i + taken);
+    } else {
+        buf.erase(i, i + taken);
         taken = 0;
         total_read += taken;
     }
 
-    if (taken == 0) eo = true;
-    
+    if (taken == 0)
+        eo = true;
 }
 
 //! Read (i.e., copy and then pop) the next "len" bytes of the stream
 //! \param[in] len bytes will be popped and returned
 //! \returns a string
-std::string ByteStream::read(const size_t len) 
-{
+std::string ByteStream::read(const size_t len) {
     const string result = peek_output(len);
     pop_output(len);
     return result;
 }
 
-void ByteStream::set_error() { eror = true;}
+void ByteStream::set_error() { eror = true; }
 
-bool ByteStream::error() const {return eror;}
+bool ByteStream::error() const { return eror; }
 
-void ByteStream::end_input() { inpu_ended = true;}
+void ByteStream::end_input() { inpu_ended = true; }
 
 bool ByteStream::input_ended() const { return inpu_ended; }
 
